@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MMUST - Exam Application Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f5f7fb;color:#1a1a1a}
+.header{height:64px;background:#0a3d2e;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}.logo span{width:36px;height:36px;background:#f9b233;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0a3d2e}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px)}
+.side{background:#fff;border-right:1px solid #e5e7eb;padding:16px}
+.nav-item{padding:12px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14px;margin:4px 0;color:#555}
+.nav-item.active{background:#0a3d2e;color:#fff;font-weight:600}
+.nav-item.disabled{opacity:.4;pointer-events:none}
+.main{padding:24px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi .card{margin:0}
+.badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;display:inline-block}
+.badge-green{background:#dcfce7;color:#166534}.badge-red{background:#fee2e2;color:#991b1b}.badge-yellow{background:#fef9c3;color:#854d0e}
+.input{width:100%;height:44px;border:1px solid #d1d5db;border-radius:8px;padding:0 12px;margin:6px 0;font-size:14px}
+select.input{height:44px}
+.btn{height:44px;border:none;border-radius:8px;font-weight:700;cursor:pointer;padding:0 18px;font-size:14px}
+.btn-green{background:#0a3d2e;color:#fff}.btn-yellow{background:#f9b233;color:#0a3d2e}.btn-ghost{background:#f3f4f6;color:#111}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.table{width:100%;border-collapse:collapse;font-size:14px}.table th{ text-align:left;padding:10px;background:#f9fafb;border-bottom:1px solid #e5e7eb}.table td{padding:10px;border-bottom:1px solid #f3f4f6}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal.show{display:flex}
+.mcard{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:480px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#111;color:#fff;padding:12px 18px;border-radius:8px;opacity:0;transition:.3s;z-index:200}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:none}.kpi{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo"><span>M</span> MMUST - Masinde Muliro <span style="font-size:11px;background:#fff;color:#0a3d2e;padding:2px 8px;border-radius:20px;margin-left:8px">EXAM PORTAL</span></div>
+<div style="display:flex;gap:12px;align-items:center"><span id="userEmail" style="font-size:13px">student@mmust.ac.ke</span><button id="logoutBtn" style="height:32px;padding:0 12px;background:#ffffff22;border:1px solid #ffffff33;color:#fff;border-radius:6px">Logout</button></div>
+</div>
+
+<div class="layout">
+<div class="side">
+<div id="navDashboard" class="nav-item active">📊 Dashboard</div>
+<div id="navFees" class="nav-item">💰 Fees Status</div>
+<div id="navApply" class="nav-item">📝 Apply Exam</div>
+<div id="navMyApps" class="nav-item">📄 My Applications</div>
+<div id="navAdmin" class="nav-item">🛡️ Admin (Demo)</div>
+<div style="margin-top:20px;padding:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:12px"><b style="color:#0a3d2e">Rule:</b> You must clear school fees to apply for Supplementary / Special exam. System checks automatically.</div>
+</div>
+<div class="main">
+<!-- DASHBOARD -->
+<div id="pageDashboard">
+<div class="kpi">
+<div class="card"><div style="font-size:12px;color:#666">Fees Balance</div><div id="kpiFees" style="font-size:22px;font-weight:700">KES 0</div><div id="kpiFeesBadge" class="badge badge-green" style="margin-top:6px">CLEARED</div></div>
+<div class="card"><div style="font-size:12px;color:#666">Supplementary</div><div id="kpiSupp" style="font-size:22px;font-weight:700">0</div><div style="font-size:11px;color:#666;margin-top:6px">Applied this sem</div></div>
+<div class="card"><div style="font-size:12px;color:#666">Special Exams</div><div id="kpiSpec" style="font-size:22px;font-weight:700">0</div><div style="font-size:11px;color:#666;margin-top:6px">Applied this sem</div></div>
+<div class="card"><div style="font-size:12px;color:#666">Eligibility</div><div id="kpiElig" style="font-size:22px;font-weight:700;color:#0a3d2e">ELIGIBLE</div><div style="font-size:11px;color:#666;margin-top:6px" id="kpiEligTxt">Fees cleared</div></div>
+</div>
+<div class="card" style="margin-top:16px">
+<h3>Welcome to MMUST Supplementary & Special Exam Portal</h3>
+<p style="font-size:14px;color:#555;margin-top:8px;line-height:1.6">
+1. Check Fees Status → Must be <b>C
